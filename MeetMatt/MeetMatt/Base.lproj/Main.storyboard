@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -45,16 +46,22 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qrL-vq-BcC">
-                                <rect key="frame" x="20" y="45" width="335" height="602"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qrL-vq-BcC" customClass="CPTGraphHostingView">
+                                <rect key="frame" x="20" y="45" width="335" height="221"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.97826086960000003" green="0.91848131079999995" blue="0.73914263440000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="qrL-vq-BcC" firstAttribute="top" secondItem="cF2-Le-7mQ" secondAttribute="bottom" constant="8.5" id="2i5-eh-tNL"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="qrL-vq-BcC" secondAttribute="trailing" constant="4" id="9DZ-Fi-SMr"/>
+                            <constraint firstItem="qrL-vq-BcC" firstAttribute="leading" secondItem="ZwX-cT-FIQ" secondAttribute="leadingMargin" constant="4" id="BsT-Qs-PR1"/>
+                            <constraint firstItem="EPS-s9-h4K" firstAttribute="top" secondItem="qrL-vq-BcC" secondAttribute="bottom" constant="401" id="NIG-Uk-5e6"/>
                             <constraint firstItem="cF2-Le-7mQ" firstAttribute="leading" secondItem="ZwX-cT-FIQ" secondAttribute="leading" constant="20" symbolic="YES" id="PnF-O8-Bso"/>
                             <constraint firstAttribute="trailing" secondItem="cF2-Le-7mQ" secondAttribute="trailing" constant="20" symbolic="YES" id="cCk-mG-gz5"/>
+                            <constraint firstItem="qrL-vq-BcC" firstAttribute="leading" secondItem="ZwX-cT-FIQ" secondAttribute="leadingMargin" constant="4" id="nvU-co-Jwj"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="qrL-vq-BcC" secondAttribute="trailing" constant="4" id="t4F-eG-0nG"/>
+                            <constraint firstItem="qrL-vq-BcC" firstAttribute="top" secondItem="cF2-Le-7mQ" secondAttribute="bottom" constant="8.5" id="uA7-po-He9"/>
                             <constraint firstItem="cF2-Le-7mQ" firstAttribute="top" secondItem="ZwX-cT-FIQ" secondAttribute="top" constant="20" symbolic="YES" id="zem-Jm-uYh"/>
                         </constraints>
                     </view>

@@ -12,8 +12,6 @@ import CorePlot
 class RootViewController: UIViewController, UIPageViewControllerDelegate {
 
     var pageViewController: UIPageViewController?
-    @IBOutlet weak var hostView: CPTGraphHostingView!
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
