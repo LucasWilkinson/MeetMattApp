@@ -11,48 +11,83 @@ import CorePlot
 
 class GraphController: NSObject, CPTPlotDelegate, CPTPlotDataSource {
     
-    let fakeData: [Double] = [1,-1,1.2,-1.2,0,-2,3,-2,1,-1,1,-1,1,-1]
+    var graph: CPTXYGraph! = nil
+    let scalePadding: Float = 0.1
+    
+    var _yData: [Double] = []
+    var _xData: [Double] = []
     
     func numberOfRecords(for plot: CPTPlot) -> UInt {
-        return UInt(fakeData.count)
+        return UInt(_xData.count)
     }
     
     func double(for plot: CPTPlot, field fieldEnum: UInt, record idx: UInt) -> Double {
         print("---------")
         if (CPTScatterPlotField( rawValue: Int(fieldEnum)) == CPTScatterPlotField.X){
             print("x \(idx)")
-            return Double(idx)
+            return _xData[Int(idx)]
         }else if (CPTScatterPlotField( rawValue: Int(fieldEnum)) == CPTScatterPlotField.Y){
-            print("y \(fakeData[Int(idx)])")
-            return fakeData[Int(idx)]
+            print("y \(_yData[Int(idx)])")
+            return _yData[Int(idx)]
         }else{
             print("??????")
             return 0
         }
     }
     
-}
-
-
-
-class DataViewController: UIViewController {
-
-    @IBOutlet weak var dataLabel: UILabel!
-    @IBOutlet weak var hostView: CPTGraphHostingView!
-    
-    var dataObject: String = ""
-    var graphController: GraphController = GraphController()
-    
-    let plotSpace = CPTXYPlotSpace()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+    func setData(xData: [Double], yData: [Double]){
+        if (xData.count != yData.count){
+            print("Data size mismatch!")
+            return
+        }
         
+        _yData = yData
+        _xData = xData
+        
+        graph.reloadData()
+        scaleAxis()
+    }
+    
+    func scaleAxis(){
+        
+        if (_xData.count == 0){
+            return
+        }
+        
+        var xMax = Float(_xData.max()!)
+        var xMin = Float(_xData.min()!)
+        var yMax = Float(_yData.max()!)
+        var yMin = Float(_yData.min()!)
+        
+        let xPad = (xMax - xMin)*scalePadding
+        let yPad = (yMax - yMin)*scalePadding
+        
+        xMax += xPad
+        xMin -= xPad
+        yMax += yPad
+        yMin -= yPad
+        
+        setAxis(xMin: xMin, xMax: xMax, yMin: yMin, yMax: yMax)
+    }
+    
+    func setAxis(xMin: Float, xMax: Float, yMin: Float, yMax: Float){
+        
+        let graphPlotSpace = graph.defaultPlotSpace as! CPTXYPlotSpace
+
+        let xLocation = NSNumber(value: xMin)
+        let xLength = NSNumber(value: xMax - xMin)
+        
+        let yLocation = NSNumber(value: yMin)
+        let yLength = NSNumber(value: yMax - yMin)
+        
+        graphPlotSpace.xRange = CPTPlotRange(location: xLocation, length: xLength)
+        graphPlotSpace.yRange = CPTPlotRange(location: yLocation, length: yLength)
+    }
+
+    func createGraph(frame: CGRect) -> CPTXYGraph {
         
         // 1 - Get a reference to the graph
-        let graph = CPTXYGraph(frame: hostView.bounds)
-        hostView.hostedGraph = graph
+        graph = CPTXYGraph(frame: frame)
         graph.paddingLeft = 0.0
         graph.paddingTop = 0.0
         graph.paddingRight = 0.0
@@ -95,7 +130,7 @@ class DataViewController: UIViewController {
         // 2 - Create the chart
         let plot = CPTScatterPlot()
         //plot.delegate = graphController
-        plot.dataSource = graphController
+        plot.dataSource = self
         //plot.identifier = NSString(string: graph.title!)
         
         // 3 - Configure border style
@@ -110,21 +145,44 @@ class DataViewController: UIViewController {
         labelTextStyle.textAlignment = .center
         plot.labelTextStyle = labelTextStyle
         
-        let graphPlotSpace = graph.defaultPlotSpace as! CPTXYPlotSpace
-        graphPlotSpace.xRange = CPTPlotRange(location: 0, length: 10)
-        graphPlotSpace.yRange = CPTPlotRange(location: -3, length: 6)
-        
-        //plot.bounds
-        
-        
         plot.interpolation = .curved
         plot.dataLineStyle = borderStyle
         
         let backgroundColor = UIColor(red: 100.0/255.0, green: 130.0/255.0, blue: 230.0/255.0, alpha: 1.0)
         plot.backgroundColor = backgroundColor.cgColor
         
+        setAxis(xMin: -2, xMax: 2, yMin: -2, yMax: 2)
+        
         // 5 - Add chart to graph
         graph.add(plot)
+    
+        
+        
+        return graph
+    }
+    
+}
+
+
+
+class DataViewController: UIViewController {
+
+    @IBOutlet weak var dataLabel: UILabel!
+    @IBOutlet weak var hostView: CPTGraphHostingView!
+    
+    let fake_yData: [Double] = [1,-1,1.2,-1.2,0,-2,3,-2,1,-1, 1,-1, 1,-1]
+    let fake_xData: [Double] = [0, 1,  2,   3,4, 5,6, 7,8,10,11,15,16,17 ]
+    
+    var dataObject: String = ""
+    var graphController: GraphController = GraphController()
+    
+    let plotSpace = CPTXYPlotSpace()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+        hostView.hostedGraph = graphController.createGraph(frame: hostView.bounds)
+        graphController.setData(xData: fake_xData, yData: fake_yData)
         
     }
 

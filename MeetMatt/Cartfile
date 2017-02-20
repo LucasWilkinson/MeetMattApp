@@ -1,1 +1,2 @@
 github "core-plot/core-plot"
+github "Alamofire/Alamofire" ~> 4.3

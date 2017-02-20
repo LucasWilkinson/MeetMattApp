@@ -18,6 +18,8 @@
 		E80E41CD1E4811150056013A /* MeetMattUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E80E41CC1E4811150056013A /* MeetMattUITests.swift */; };
 		E80E41E91E481EE20056013A /* CorePlot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E80E41E81E481EE20056013A /* CorePlot.framework */; };
 		E80E41EA1E481EE20056013A /* CorePlot.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E80E41E81E481EE20056013A /* CorePlot.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E82104811E5B79EF002C2328 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E82104801E5B79EF002C2328 /* Alamofire.framework */; };
+		E82104821E5B79EF002C2328 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E82104801E5B79EF002C2328 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +47,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				E80E41EA1E481EE20056013A /* CorePlot.framework in Embed Frameworks */,
+				E82104821E5B79EF002C2328 /* Alamofire.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -69,6 +72,7 @@
 		E80E41CE1E4811150056013A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E80E41DB1E481AEF0056013A /* Charts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Charts.framework; path = Carthage/Build/iOS/Charts.framework; sourceTree = "<group>"; };
 		E80E41E81E481EE20056013A /* CorePlot.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CorePlot.framework; path = Carthage/Build/iOS/CorePlot.framework; sourceTree = "<group>"; };
+		E82104801E5B79EF002C2328 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +81,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E80E41E91E481EE20056013A /* CorePlot.framework in Frameworks */,
+				E82104811E5B79EF002C2328 /* Alamofire.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,6 +105,7 @@
 		E80E419C1E4811140056013A = {
 			isa = PBXGroup;
 			children = (
+				E82104801E5B79EF002C2328 /* Alamofire.framework */,
 				E80E41E81E481EE20056013A /* CorePlot.framework */,
 				E80E41A71E4811150056013A /* MeetMatt */,
 				E80E41C01E4811150056013A /* MeetMattTests */,
@@ -229,6 +235,7 @@
 				TargetAttributes = {
 					E80E41A41E4811150056013A = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 7R5MWDAWJX;
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 					};
@@ -452,6 +459,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = 7R5MWDAWJX;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -471,6 +479,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = 7R5MWDAWJX;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -557,6 +566,7 @@
 				E80E41D31E4811150056013A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E80E41D41E4811150056013A /* Build configuration list for PBXNativeTarget "MeetMattTests" */ = {
 			isa = XCConfigurationList;
@@ -565,6 +575,7 @@
 				E80E41D61E4811150056013A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E80E41D71E4811150056013A /* Build configuration list for PBXNativeTarget "MeetMattUITests" */ = {
 			isa = XCConfigurationList;
@@ -573,6 +584,7 @@
 				E80E41D91E4811150056013A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

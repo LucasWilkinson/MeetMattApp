@@ -8,6 +8,7 @@
 
 import UIKit
 import CorePlot
+import Alamofire
 
 class RootViewController: UIViewController, UIPageViewControllerDelegate {
 
