@@ -8,182 +8,136 @@
 
 import UIKit
 import CorePlot
+import Alamofire
 
-class GraphController: NSObject, CPTPlotDelegate, CPTPlotDataSource {
+class User {
     
-    var graph: CPTXYGraph! = nil
-    let scalePadding: Float = 0.1
+    var name: String = ""
+    var id: Int = 0
     
-    var _yData: [Double] = []
-    var _xData: [Double] = []
-    
-    func numberOfRecords(for plot: CPTPlot) -> UInt {
-        return UInt(_xData.count)
-    }
-    
-    func double(for plot: CPTPlot, field fieldEnum: UInt, record idx: UInt) -> Double {
-        print("---------")
-        if (CPTScatterPlotField( rawValue: Int(fieldEnum)) == CPTScatterPlotField.X){
-            print("x \(idx)")
-            return _xData[Int(idx)]
-        }else if (CPTScatterPlotField( rawValue: Int(fieldEnum)) == CPTScatterPlotField.Y){
-            print("y \(_yData[Int(idx)])")
-            return _yData[Int(idx)]
-        }else{
-            print("??????")
-            return 0
-        }
-    }
-    
-    func setData(xData: [Double], yData: [Double]){
-        if (xData.count != yData.count){
-            print("Data size mismatch!")
-            return
-        }
+    init?(json: [String: Any]) {
+        guard let name = json["name"] as? String,
+            let id = json["id"] as? Int
+            else { return nil }
         
-        _yData = yData
-        _xData = xData
-        
-        graph.reloadData()
-        scaleAxis()
-    }
-    
-    func scaleAxis(){
-        
-        if (_xData.count == 0){
-            return
-        }
-        
-        var xMax = Float(_xData.max()!)
-        var xMin = Float(_xData.min()!)
-        var yMax = Float(_yData.max()!)
-        var yMin = Float(_yData.min()!)
-        
-        let xPad = (xMax - xMin)*scalePadding
-        let yPad = (yMax - yMin)*scalePadding
-        
-        xMax += xPad
-        xMin -= xPad
-        yMax += yPad
-        yMin -= yPad
-        
-        setAxis(xMin: xMin, xMax: xMax, yMin: yMin, yMax: yMax)
-    }
-    
-    func setAxis(xMin: Float, xMax: Float, yMin: Float, yMax: Float){
-        
-        let graphPlotSpace = graph.defaultPlotSpace as! CPTXYPlotSpace
-
-        let xLocation = NSNumber(value: xMin)
-        let xLength = NSNumber(value: xMax - xMin)
-        
-        let yLocation = NSNumber(value: yMin)
-        let yLength = NSNumber(value: yMax - yMin)
-        
-        graphPlotSpace.xRange = CPTPlotRange(location: xLocation, length: xLength)
-        graphPlotSpace.yRange = CPTPlotRange(location: yLocation, length: yLength)
-    }
-
-    func createGraph(frame: CGRect) -> CPTXYGraph {
-        
-        // 1 - Get a reference to the graph
-        graph = CPTXYGraph(frame: frame)
-        graph.paddingLeft = 0.0
-        graph.paddingTop = 0.0
-        graph.paddingRight = 0.0
-        graph.paddingBottom = 0.0
-        
-        graph.plotAreaFrame?.paddingLeft = 20.0
-        graph.plotAreaFrame?.paddingTop = 20.0
-        graph.plotAreaFrame?.paddingRight = 20.0
-        graph.plotAreaFrame?.paddingBottom = 20.0
-        
-        // 2 - Create text style
-        let textStyle: CPTMutableTextStyle = CPTMutableTextStyle()
-        textStyle.color = CPTColor.white()
-        textStyle.fontName = "HelveticaNeue-Bold"
-        textStyle.fontSize = 16.0
-        textStyle.textAlignment = .center
-        
-        // 3 - Set graph title and text style
-        graph.title = "Weight vs Time\n"
-        graph.titleTextStyle = textStyle
-        graph.titlePlotAreaFrameAnchor = CPTRectAnchor.top
-        
-        let axisLabelTextStyle = CPTMutableTextStyle()
-        axisLabelTextStyle.fontSize = 12
-        axisLabelTextStyle.color = CPTColor.white()
-        
-        let axisSet = CPTXYAxisSet()
-        axisSet.xAxis?.majorIntervalLength = 3
-        axisSet.xAxis?.minorTickLineStyle = nil
-        axisSet.xAxis?.labelingPolicy = .automatic
-        axisSet.xAxis?.labelTextStyle = axisLabelTextStyle
-        axisSet.xAxis?.visibleRange = CPTPlotRange(location: -2, length: 4)
-        axisSet.yAxis?.majorIntervalLength = 3
-        axisSet.yAxis?.minorTickLineStyle = nil
-        axisSet.yAxis?.labelingPolicy = .automatic
-        axisSet.yAxis?.labelTextStyle = axisLabelTextStyle
-        axisSet.yAxis?.visibleRange = CPTPlotRange(location: -2, length: 4)
-        graph.axisSet = axisSet as CPTAxisSet
-        
-        // 2 - Create the chart
-        let plot = CPTScatterPlot()
-        //plot.delegate = graphController
-        plot.dataSource = self
-        //plot.identifier = NSString(string: graph.title!)
-        
-        // 3 - Configure border style
-        let borderStyle = CPTMutableLineStyle()
-        borderStyle.lineColor = CPTColor.white()
-        borderStyle.lineWidth = 1.0
-        graph.borderLineStyle = borderStyle
-        
-        // 4 - Configure text style
-        let labelTextStyle = CPTMutableTextStyle()
-        labelTextStyle.color = CPTColor.white()
-        labelTextStyle.textAlignment = .center
-        plot.labelTextStyle = labelTextStyle
-        
-        plot.interpolation = .curved
-        plot.dataLineStyle = borderStyle
-        
-        let backgroundColor = UIColor(red: 100.0/255.0, green: 130.0/255.0, blue: 230.0/255.0, alpha: 1.0)
-        plot.backgroundColor = backgroundColor.cgColor
-        
-        setAxis(xMin: -2, xMax: 2, yMin: -2, yMax: 2)
-        
-        // 5 - Add chart to graph
-        graph.add(plot)
-    
-        
-        
-        return graph
+        self.name = name
+        self.id = id
     }
     
 }
 
 
-
-class DataViewController: UIViewController {
+class DataViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
 
     @IBOutlet weak var dataLabel: UILabel!
     @IBOutlet weak var hostView: CPTGraphHostingView!
+    @IBOutlet weak var userSelector: UIPickerView!
     
     let fake_yData: [Double] = [1,-1,1.2,-1.2,0,-2,3,-2,1,-1, 1,-1, 1,-1]
-    let fake_xData: [Double] = [0, 1,  2,   3,4, 5,6, 7,8,10,11,15,16,17 ]
+    let fake_xData: [Double] = [0, 1,  2,   3,4, 5,6, 7,8,10,11,15,16,17]
     
+    var users: [User] = []
     var dataObject: String = ""
-    var graphController: GraphController = GraphController()
+    var graphController = GraphController()
     
     let plotSpace = CPTXYPlotSpace()
 
+    func requestUsers(){
+        Alamofire.request("http://api.meetmatt.ca/public/api/v1/users").validate().responseJSON { response in
+            print(response.result)   // result of response serialization
+            var userList: [User] = []
+            
+            if let usersJSON = response.result.value as? [Any]{
+                for userJSON in usersJSON {
+                    guard let user = User(json: userJSON  as! [String : Any])
+                        else{ continue }
+                    
+                    userList.append(user)
+                }
+            }
+            self.updateUserList(newUserList: userList)
+        }
+    }
+    
+    func getUserData(id: Int){
+        let idParameter: Parameters = ["user_id": id]
+        print("\(idParameter)")
+        Alamofire.request("http://api.meetmatt.ca/public/api/v1/interactions", parameters: idParameter).validate().responseJSON { response in
+            print(response.result)   // result of response serialization
+            //print(response.request)
+            //print(response.result.value)
+            
+            var xData: [Double] = []
+            var yData: [Double] = []
+                
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+
+            //let date = dateFormatter.date(from:isoDate)!
+            
+            if let dataPointsJSON = response.result.value as? [Any]{
+                for dataPoint in dataPointsJSON {
+                    guard let data = dataPoint as? [String: Any]
+                        else{ print("failed to cast datapoint"); continue }
+                    guard let weight = (data["weight"] as? NSString)?.doubleValue
+                        else{ print("failed to get weight"); continue }
+                    
+                    let date = dateFormatter.date(from: data["date_time"] as! String)
+                    
+                    yData.append(weight)
+                    xData.append((date?.timeIntervalSince1970)!)
+                    
+                    print("\((date?.timeIntervalSince1970)!)")
+                    
+                }
+                
+                self.graphController.setData(xData: xData, yData: yData)
+            }
+        }
+    }
+    
+    func updateUserList (newUserList: [User]){
+        print("updating user list")
+        users = newUserList
+        userSelector.reloadAllComponents()
+    }
+    
+    
+    
+    /* -- start Picker view data source and delegate functions */
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return users.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return users[row].name
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        //myLabel.text = users[row].name
+        print("selected \(users[row].name)")
+        getUserData(id: users[row].id)
+    }
+    
+    /* ---- end Picker view data source and delegate functions */
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         hostView.hostedGraph = graphController.createGraph(frame: hostView.bounds)
-        graphController.setData(xData: fake_xData, yData: fake_yData)
+        userSelector.dataSource = self
+        userSelector.delegate = self
         
+        requestUsers()
+        
+        graphController.setData(xData: fake_xData, yData: fake_yData)
     }
 
     override func didReceiveMemoryWarning() {
