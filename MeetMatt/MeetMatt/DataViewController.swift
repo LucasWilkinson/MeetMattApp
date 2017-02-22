@@ -29,7 +29,7 @@ class User {
 
 class DataViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
 
-    @IBOutlet weak var dataLabel: UILabel!
+    @IBOutlet weak var MeetMattLabel: UILabel!
     @IBOutlet weak var hostView: CPTGraphHostingView!
     @IBOutlet weak var userSelector: UIPickerView!
     
@@ -54,6 +54,9 @@ class DataViewController: UIViewController, UIPickerViewDataSource, UIPickerView
                     
                     userList.append(user)
                 }
+            }
+            if (userList.count > 0){
+                self.getUserData(id: userList[0].id)
             }
             self.updateUserList(newUserList: userList)
         }
@@ -87,7 +90,7 @@ class DataViewController: UIViewController, UIPickerViewDataSource, UIPickerView
                     yData.append(weight)
                     xData.append((date?.timeIntervalSince1970)!)
                     
-                    print("\((date?.timeIntervalSince1970)!)")
+                    //print("\((date?.timeIntervalSince1970)!)")
                     
                 }
                 
@@ -137,7 +140,7 @@ class DataViewController: UIViewController, UIPickerViewDataSource, UIPickerView
         
         requestUsers()
         
-        graphController.setData(xData: fake_xData, yData: fake_yData)
+        //graphController.setData(xData: fake_xData, yData: fake_yData)
     }
 
     override func didReceiveMemoryWarning() {
@@ -147,7 +150,6 @@ class DataViewController: UIViewController, UIPickerViewDataSource, UIPickerView
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.dataLabel!.text = dataObject
     }
 
 

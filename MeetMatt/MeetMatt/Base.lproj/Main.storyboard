@@ -40,40 +40,56 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="cF2-Le-7mQ">
-                                <rect key="frame" x="20" y="20" width="335" height="16.5"/>
-                                <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="14"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qrL-vq-BcC" customClass="CPTGraphHostingView">
+                                <rect key="frame" x="20" y="126" width="335" height="277"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="277" id="VZr-EU-T9h"/>
+                                    <constraint firstAttribute="width" constant="335" id="qFt-jd-z6P"/>
+                                </constraints>
+                            </view>
+                            <pickerView contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ivv-43-Yh1">
+                                <rect key="frame" x="0.0" y="540" width="375" height="127"/>
+                            </pickerView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="oU0-LS-N1e">
+                                <rect key="frame" x="20" y="68" width="335" height="29"/>
+                                <segments>
+                                    <segment title="Week"/>
+                                    <segment title="Month"/>
+                                    <segment title="All"/>
+                                </segments>
+                                <color key="tintColor" red="0.29019607843137252" green="0.50980392156862742" blue="0.85882352941176465" alpha="1" colorSpace="calibratedRGB"/>
+                            </segmentedControl>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Meet Matt the App" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="cF2-Le-7mQ">
+                                <rect key="frame" x="20" y="28" width="335" height="18.5"/>
+                                <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
+                                <color key="textColor" red="0.29019607843137252" green="0.50980392156862742" blue="0.85882352941176465" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qrL-vq-BcC" customClass="CPTGraphHostingView">
-                                <rect key="frame" x="20" y="45" width="335" height="221"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
-                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ivv-43-Yh1">
-                                <rect key="frame" x="0.0" y="344" width="375" height="216"/>
-                            </pickerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="qrL-vq-BcC" firstAttribute="top" secondItem="cF2-Le-7mQ" secondAttribute="bottom" constant="8.5" id="2i5-eh-tNL"/>
-                            <constraint firstItem="Ivv-43-Yh1" firstAttribute="top" secondItem="qrL-vq-BcC" secondAttribute="bottom" constant="78" id="7O0-OH-pLE"/>
+                            <constraint firstItem="cF2-Le-7mQ" firstAttribute="leading" secondItem="ZwX-cT-FIQ" secondAttribute="leadingMargin" constant="4" id="0Bf-MH-4df"/>
+                            <constraint firstItem="qrL-vq-BcC" firstAttribute="top" secondItem="oU0-LS-N1e" secondAttribute="bottom" constant="30" id="3je-Oy-O2y"/>
+                            <constraint firstItem="oU0-LS-N1e" firstAttribute="top" secondItem="cF2-Le-7mQ" secondAttribute="bottom" constant="21.5" id="4CD-6I-NVI"/>
+                            <constraint firstItem="qrL-vq-BcC" firstAttribute="leading" secondItem="ZwX-cT-FIQ" secondAttribute="leadingMargin" constant="4" id="4tb-0R-cOZ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="qrL-vq-BcC" secondAttribute="trailing" constant="4" id="9DZ-Fi-SMr"/>
-                            <constraint firstItem="qrL-vq-BcC" firstAttribute="leading" secondItem="ZwX-cT-FIQ" secondAttribute="leadingMargin" constant="4" id="BsT-Qs-PR1"/>
-                            <constraint firstItem="EPS-s9-h4K" firstAttribute="top" secondItem="qrL-vq-BcC" secondAttribute="bottom" constant="401" id="NIG-Uk-5e6"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="oU0-LS-N1e" secondAttribute="trailing" constant="4" id="HYQ-qX-lNP"/>
+                            <constraint firstItem="EPS-s9-h4K" firstAttribute="top" secondItem="Ivv-43-Yh1" secondAttribute="bottom" id="NRI-zh-Kbs"/>
+                            <constraint firstItem="cF2-Le-7mQ" firstAttribute="top" secondItem="fXf-Jd-eTc" secondAttribute="bottom" constant="8" id="NSg-Og-crw"/>
                             <constraint firstItem="cF2-Le-7mQ" firstAttribute="leading" secondItem="ZwX-cT-FIQ" secondAttribute="leading" constant="20" symbolic="YES" id="PnF-O8-Bso"/>
+                            <constraint firstItem="qrL-vq-BcC" firstAttribute="top" secondItem="oU0-LS-N1e" secondAttribute="bottom" constant="30" id="R1B-oe-TlN"/>
+                            <constraint firstItem="oU0-LS-N1e" firstAttribute="leading" secondItem="ZwX-cT-FIQ" secondAttribute="leadingMargin" constant="4" id="Xfk-0e-Qzh"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="cF2-Le-7mQ" secondAttribute="trailing" constant="4" id="YCo-7j-Srg"/>
                             <constraint firstAttribute="trailing" secondItem="cF2-Le-7mQ" secondAttribute="trailing" constant="20" symbolic="YES" id="cCk-mG-gz5"/>
-                            <constraint firstItem="EPS-s9-h4K" firstAttribute="top" secondItem="Ivv-43-Yh1" secondAttribute="bottom" constant="107" id="cya-2k-d5X"/>
                             <constraint firstItem="Ivv-43-Yh1" firstAttribute="leading" secondItem="ZwX-cT-FIQ" secondAttribute="leading" id="dED-mz-SGr"/>
                             <constraint firstAttribute="trailing" secondItem="Ivv-43-Yh1" secondAttribute="trailing" id="g4W-O0-rWq"/>
-                            <constraint firstItem="qrL-vq-BcC" firstAttribute="leading" secondItem="ZwX-cT-FIQ" secondAttribute="leadingMargin" constant="4" id="nvU-co-Jwj"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="qrL-vq-BcC" secondAttribute="trailing" constant="4" id="iBq-QP-NEu"/>
                             <constraint firstAttribute="trailingMargin" secondItem="qrL-vq-BcC" secondAttribute="trailing" constant="4" id="t4F-eG-0nG"/>
-                            <constraint firstItem="qrL-vq-BcC" firstAttribute="top" secondItem="cF2-Le-7mQ" secondAttribute="bottom" constant="8.5" id="uA7-po-He9"/>
-                            <constraint firstItem="cF2-Le-7mQ" firstAttribute="top" secondItem="ZwX-cT-FIQ" secondAttribute="top" constant="20" symbolic="YES" id="zem-Jm-uYh"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="dataLabel" destination="cF2-Le-7mQ" id="3EH-BK-JV6"/>
+                        <outlet property="MeetMattLabel" destination="cF2-Le-7mQ" id="wo6-bQ-PlL"/>
                         <outlet property="hostView" destination="qrL-vq-BcC" id="Mg0-N7-oSW"/>
                         <outlet property="userSelector" destination="Ivv-43-Yh1" id="7iB-Kd-HyF"/>
                     </connections>
