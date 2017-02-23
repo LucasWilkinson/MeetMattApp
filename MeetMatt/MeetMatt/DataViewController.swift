@@ -29,9 +29,10 @@ class User {
 
 class DataViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
 
-    @IBOutlet weak var MeetMattLabel: UILabel!
+    @IBOutlet weak var meetMattLabel: UILabel!
     @IBOutlet weak var hostView: CPTGraphHostingView!
     @IBOutlet weak var userSelector: UIPickerView!
+    @IBOutlet weak var filterSelector: UISegmentedControl!
     
     let fake_yData: [Double] = [1,-1,1.2,-1.2,0,-2,3,-2,1,-1, 1,-1, 1,-1]
     let fake_xData: [Double] = [0, 1,  2,   3,4, 5,6, 7,8,10,11,15,16,17]
@@ -70,8 +71,7 @@ class DataViewController: UIViewController, UIPickerViewDataSource, UIPickerView
             //print(response.request)
             //print(response.result.value)
             
-            var xData: [Double] = []
-            var yData: [Double] = []
+            var dataList: [scatterPlotPoint] = []
                 
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -87,14 +87,13 @@ class DataViewController: UIViewController, UIPickerViewDataSource, UIPickerView
                     
                     let date = dateFormatter.date(from: data["date_time"] as! String)
                     
-                    yData.append(weight)
-                    xData.append((date?.timeIntervalSince1970)!)
+                    let tempData = scatterPlotPoint(x: (date?.timeIntervalSince1970)!, y: weight)
+                    
+                    dataList.append(tempData)
                     
                     //print("\((date?.timeIntervalSince1970)!)")
-                    
                 }
-                
-                self.graphController.setData(xData: xData, yData: yData)
+                self.graphController.setData(data: dataList)
             }
         }
     }
@@ -130,6 +129,23 @@ class DataViewController: UIViewController, UIPickerViewDataSource, UIPickerView
     /* ---- end Picker view data source and delegate functions */
     
     
+    func filterSelected(){
+        
+        switch(filterSelector.selectedSegmentIndex){
+        case 2:
+            graphController.setFilter(filterType: .ALL)
+            break
+        case 1:
+            graphController.setFilter(filterType: .MONTH)
+            break
+        case 0:
+            graphController.setFilter(filterType: .WEEK)
+            break
+        default:
+            print("Bad Selection")
+            break
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -137,6 +153,8 @@ class DataViewController: UIViewController, UIPickerViewDataSource, UIPickerView
         hostView.hostedGraph = graphController.createGraph(frame: hostView.bounds)
         userSelector.dataSource = self
         userSelector.delegate = self
+        filterSelector.selectedSegmentIndex = 2
+        filterSelector.addTarget(self, action: #selector(filterSelected), for: .valueChanged)
         
         requestUsers()
         

@@ -49,7 +49,7 @@
                                 </constraints>
                             </view>
                             <pickerView contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ivv-43-Yh1">
-                                <rect key="frame" x="0.0" y="540" width="375" height="127"/>
+                                <rect key="frame" x="0.0" y="573" width="375" height="94"/>
                             </pickerView>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="oU0-LS-N1e">
                                 <rect key="frame" x="20" y="68" width="335" height="29"/>
@@ -89,8 +89,9 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="MeetMattLabel" destination="cF2-Le-7mQ" id="wo6-bQ-PlL"/>
+                        <outlet property="filterSelector" destination="oU0-LS-N1e" id="gA5-Qs-mad"/>
                         <outlet property="hostView" destination="qrL-vq-BcC" id="Mg0-N7-oSW"/>
+                        <outlet property="meetMattLabel" destination="cF2-Le-7mQ" id="Jqb-qJ-tB5"/>
                         <outlet property="userSelector" destination="Ivv-43-Yh1" id="7iB-Kd-HyF"/>
                     </connections>
                 </viewController>

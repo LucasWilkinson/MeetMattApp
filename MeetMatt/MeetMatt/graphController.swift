@@ -10,6 +10,11 @@ import Foundation
 import CorePlot
 import Alamofire
 
+struct scatterPlotPoint {
+    var x: Double
+    var y: Double
+}
+
 class GraphController: NSObject, CPTPlotDelegate, CPTScatterPlotDataSource {
     
     var graph: CPTXYGraph! = nil
@@ -21,71 +26,86 @@ class GraphController: NSObject, CPTPlotDelegate, CPTScatterPlotDataSource {
     
     let xAxisTargetNumLabels: Double = 6.0
     
-    var _yData: [Double] = []
-    var _xData: [Double] = []
+    var data: [scatterPlotPoint] = []
+    var filteredData: [scatterPlotPoint] = []
+    
+    var currentFilter: filterTypesEnum = .ALL
+    var filteredDateFormatter = DateFormatter()
     
     let backgroundColor = CPTColor(componentRed: 74/255, green: 130/255, blue: 219/255, alpha: 1.0)
     
-    func numberOfRecords(for plot: CPTPlot) -> UInt {
-        return UInt(_xData.count)
+    enum filterTypesEnum {
+        case WEEK
+        case MONTH
+        case ALL
     }
     
-    func symbol(for plot: CPTScatterPlot, record idx: UInt) -> CPTPlotSymbol? {
-        //print("getting plot symbol")
-        
-        let plotSymbolBorder = CPTMutableLineStyle()
-        plotSymbolBorder.lineColor = .white()
-        plotSymbolBorder.lineWidth = 1.8
-        
-        let plotSymbol = CPTPlotSymbol.ellipse()
-        plotSymbol.fill = CPTFill(color: backgroundColor)
-        plotSymbol.lineStyle = plotSymbolBorder
-        
-        return plotSymbol
+    override init() {
+        super.init()
+        filteredDateFormatter.dateFormat = "MM-dd"
     }
     
-    
-    func double(for plot: CPTPlot, field fieldEnum: UInt, record idx: UInt) -> Double {
-        //print("---------")
+    func setData(data: [scatterPlotPoint]){
         
-        if (CPTScatterPlotField( rawValue: Int(fieldEnum)) == CPTScatterPlotField.X){
-            //print("x \(idx)")
-            return _xData[Int(idx)]
-        }else if (CPTScatterPlotField( rawValue: Int(fieldEnum)) == CPTScatterPlotField.Y){
-            //sprint("y \(_yData[Int(idx)])")
-            return _yData[Int(idx)]
-        }else{
-            print("??????")
-            return 0
-        }
+        self.data = data
+        reloadData()
     }
     
-    func setData(xData: [Double], yData: [Double]){
+    func setFilter(filterType: filterTypesEnum){
         
-        if (xData.count != yData.count){
-            print("Data size mismatch!")
-            return
-        }
+        currentFilter = filterType
+        reloadData()
+    }
+    
+    func reloadData(){
         
-        _yData = yData
-        _xData = xData
-        
+        filterData()
         scaleAxis()
         graph.reloadData()
     }
     
+    func filterData(){
+        var currentDate = Date()
+        currentDate = NSCalendar.current.startOfDay(for: currentDate)
+        
+        var dayComponent = DateComponents()
+        
+        switch (currentFilter){
+        case .WEEK:
+            dayComponent.weekOfYear = -1
+            let compareDate = NSCalendar.current.date(byAdding: dayComponent, to: currentDate)
+            
+            filteredDateFormatter.dateFormat = "E"
+            filteredData = data.filter({Date(timeIntervalSince1970: $0.x) > compareDate!})
+            break
+            
+        case .MONTH:
+            dayComponent.month = -1
+            let compareDate = NSCalendar.current.date(byAdding: dayComponent, to: currentDate)
+            
+            filteredDateFormatter.dateFormat = "MM-dd"
+            filteredData = data.filter({Date(timeIntervalSince1970: $0.x) > compareDate!})
+            break
+            
+        case .ALL:
+            filteredDateFormatter.dateFormat = "MM-dd"
+            filteredData = data
+            break
+        }
+    }
+    
     func scaleAxis(){
         
-        if (_xData.count == 0){
+        if (filteredData.count == 0){
             return
         }
         
-        let xMax = _xData.max()!
-        let xMin = _xData.min()!
-        let yMax = _yData.max()!
-        let yMin = _yData.min()!
+        let xMax = (filteredData.max(by: {$0.x < $1.x})!).x
+        let xMin = (filteredData.min(by: {$0.x < $1.x})!).x
+        let yMax = (filteredData.max(by: {$0.y < $1.y})!).y
+        let yMin = (filteredData.min(by: {$0.y < $1.y})!).y
         
-        //print("setting xMax: \(xMax) xMin: \(xMin) yMax: \(yMax) yMin: \(yMin)")
+        print("setting xMax: \(xMax) xMin: \(xMin) yMax: \(yMax) yMin: \(yMin)")
         setAxis(xMin: xMin, xMax: xMax, yMin: yMin, yMax: yMax)
     }
     
@@ -129,7 +149,6 @@ class GraphController: NSObject, CPTPlotDelegate, CPTScatterPlotDataSource {
         graphPlotSpace.xRange = CPTPlotRange(location: xRange.location, length: xRange.length)
         graphPlotSpace.yRange = CPTPlotRange(location: yRange.location, length: yRange.length)
         
-        
         let axes = graph.axisSet as! CPTXYAxisSet
         
         axes.xAxis?.orthogonalPosition = NSNumber(value: xAxisLocation)
@@ -143,7 +162,7 @@ class GraphController: NSObject, CPTPlotDelegate, CPTScatterPlotDataSource {
         axes.yAxis?.visibleRange = yRange
         axes.yAxis?.gridLinesRange = yGridRange
         
-        setXLabels(numberOfRecords: _xData.count, xMin: xMin, xMax: xMax)
+        setXLabels(numberOfRecords: data.count, xMin: xMin, xMax: xMax)
     }
     
     private func calculateDaysBetweenTwoDates(start: Date, end: Date) -> Int {
@@ -162,9 +181,6 @@ class GraphController: NSObject, CPTPlotDelegate, CPTScatterPlotDataSource {
         
         let axes = graph.axisSet as! CPTXYAxisSet
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM-dd"
-        
         var dayComponent = DateComponents()
         dayComponent.day = 1
         
@@ -181,12 +197,9 @@ class GraphController: NSObject, CPTPlotDelegate, CPTScatterPlotDataSource {
         daysBetweenLabels = (daysBetweenLabels.rounded() == 0) ? 1 : daysBetweenLabels.rounded()
         
         dayComponent.day = Int(daysBetweenLabels)
-        
-       // print("Min Date \(minDateRounded)")
-       // print("Min Date \(maxDateRounded)")
-        
+
         var currentDate = minDateRounded
-        var xLabels: [CPTAxisLabel] = []
+        
         var xLabelLocations: [NSNumber] = []
         
         let xLabelTextStyle = CPTMutableTextStyle()
@@ -196,13 +209,13 @@ class GraphController: NSObject, CPTPlotDelegate, CPTScatterPlotDataSource {
         
         while (currentDate <= maxDateRounded){
             
-            let xLabelString = dateFormatter.string(from: currentDate)
+            //let xLabelString = dateFormatter.string(from: currentDate)
+            //let xLabel = CPTAxisLabel(text: xLabelString, textStyle: xLabelTextStyle)
+            
             let xLocation = NSNumber(value: currentDate.timeIntervalSince1970)
             
-            print("label \(xLabelString)")
+            //print("label \(xLabelString)")
             //print(xLocation)
-            
-            let xLabel = CPTAxisLabel(text: xLabelString, textStyle: xLabelTextStyle)
             
             //xLabels.append(xLabel)
             xLabelLocations.append(xLocation)
@@ -211,15 +224,50 @@ class GraphController: NSObject, CPTPlotDelegate, CPTScatterPlotDataSource {
         }
         
         
-        let xAxisLabelFormatter = CPTTimeFormatter(dateFormatter: dateFormatter)
+        let xAxisLabelFormatter = CPTTimeFormatter(dateFormatter: filteredDateFormatter)
         axes.xAxis?.labelingPolicy = .locationsProvided;
-        //axes.xAxis?.axisLabels = Set(xLabels);
         axes.xAxis?.labelFormatter = xAxisLabelFormatter
         axes.xAxis?.majorTickLocations = Set(xLabelLocations);
         axes.xAxis?.updateMajorTickLabels()
         //axes.xAxis?.labelRotation = 90.0
         axes.xAxis?.relabel()
     }
+    
+    
+    /* --- Start DataSource delegate functions */
+    
+    func numberOfRecords(for plot: CPTPlot) -> UInt {
+        return UInt(filteredData.count)
+    }
+    
+    func symbol(for plot: CPTScatterPlot, record idx: UInt) -> CPTPlotSymbol? {
+        //print("getting plot symbol")
+        
+        let plotSymbolBorder = CPTMutableLineStyle()
+        plotSymbolBorder.lineColor = .white()
+        plotSymbolBorder.lineWidth = 1.8
+        
+        let plotSymbol = CPTPlotSymbol.ellipse()
+        plotSymbol.fill = CPTFill(color: backgroundColor)
+        plotSymbol.lineStyle = plotSymbolBorder
+        
+        return plotSymbol
+    }
+    
+    func double(for plot: CPTPlot, field fieldEnum: UInt, record idx: UInt) -> Double {
+        
+        if (CPTScatterPlotField( rawValue: Int(fieldEnum)) == CPTScatterPlotField.X){
+            return filteredData[Int(idx)].x
+        }else if (CPTScatterPlotField( rawValue: Int(fieldEnum)) == CPTScatterPlotField.Y){
+            return filteredData[Int(idx)].y
+        }else{
+            print("??????")
+            return 0
+        }
+    }
+    
+    /* ----- End DataSource delegate functions */
+    
     
     func createGraph(frame: CGRect) -> CPTXYGraph {
         
