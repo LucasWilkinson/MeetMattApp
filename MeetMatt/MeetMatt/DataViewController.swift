@@ -157,11 +157,15 @@ class UsersViewController: UIViewController , UIPickerViewDataSource, UIPickerVi
     }
 }
 
-class DataViewController: UIViewController{
+class DataViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
 
     @IBOutlet weak var hostView: CPTGraphHostingView!
     @IBOutlet weak var filterSelector: UISegmentedControl!
     //@IBOutlet weak var navigationBar: UINavigationItem!
+    @IBOutlet weak var targetWeight: UITextField!
+    
+    let targetWeightPicker = UIPickerView()
+    let barButtonDone = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(pickerDone(sender:)))
     
     let fake_yData: [Double] = [1,-1,1.2,-1.2,0,-2,3,-2,1,-1, 1,-1, 1,-1]
     let fake_xData: [Double] = [0, 1,  2,   3,4, 5,6, 7,8,10,11,15,16,17]
@@ -210,8 +214,49 @@ class DataViewController: UIViewController{
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.barTintColor = MeetMattBlue
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        
+        targetWeight.inputView = targetWeightPicker
+        targetWeightPicker.delegate = self
+        targetWeightPicker.dataSource = self
+        targetWeightPicker.backgroundColor = UIColor.white
+        
+        let screenSize: CGRect = UIScreen.main.bounds
+        let toolBar = UIToolbar(frame: CGRect(x: CGFloat(0), y: CGFloat(0), width: screenSize.width, height: CGFloat(44)))
+        toolBar.barStyle = .default
+        
+        barButtonDone.tintColor = MeetMattBlue
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        
+        toolBar.items = [flexibleSpace, barButtonDone]
+        
+        targetWeightPicker.addSubview(toolBar)
     }
 
+    /* -- start Picker view data source and delegate functions */
+    
+    func pickerDone(sender: UIBarButtonItem!){
+        print ("done")
+    }
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return 3
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        
+        return (row as NSNumber).stringValue
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        print("selected Row \(row)")
+    }
+    
+    /* ---- end Picker view data source and delegate functions */
+    
 
 }
 
