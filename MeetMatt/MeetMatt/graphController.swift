@@ -32,7 +32,7 @@ class GraphController: NSObject, CPTPlotDelegate, CPTScatterPlotDataSource {
     var currentFilter: filterTypesEnum = .ALL
     var filteredDateFormatter = DateFormatter()
     
-    let backgroundColor = CPTColor(componentRed: 74/255, green: 130/255, blue: 219/255, alpha: 1.0)
+    let backgroundColor = CPTColor(cgColor: MeetMattBlue.cgColor)
     
     enum filterTypesEnum {
         case WEEK
@@ -100,10 +100,20 @@ class GraphController: NSObject, CPTPlotDelegate, CPTScatterPlotDataSource {
             return
         }
         
-        let xMax = (filteredData.max(by: {$0.x < $1.x})!).x
-        let xMin = (filteredData.min(by: {$0.x < $1.x})!).x
-        let yMax = (filteredData.max(by: {$0.y < $1.y})!).y
-        let yMin = (filteredData.min(by: {$0.y < $1.y})!).y
+        var xMax = (filteredData.max(by: {$0.x < $1.x})!).x
+        var xMin = (filteredData.min(by: {$0.x < $1.x})!).x
+        var yMax = (filteredData.max(by: {$0.y < $1.y})!).y
+        var yMin = (filteredData.min(by: {$0.y < $1.y})!).y
+        
+        if (xMax - xMin < 2*86400) {
+            xMax += 86400 // Day in seconds
+            xMin -= 86400 // Day in seconds
+        }
+        
+        if (yMax - yMin == 0) {
+            yMax += 2
+            yMin -= 2
+        }
         
         print("setting xMax: \(xMax) xMin: \(xMin) yMax: \(yMax) yMin: \(yMin)")
         setAxis(xMin: xMin, xMax: xMax, yMin: yMin, yMax: yMax)
@@ -127,8 +137,8 @@ class GraphController: NSObject, CPTPlotDelegate, CPTScatterPlotDataSource {
         let xAxisSpacing = yLength.doubleValue*self.xAxisSpacing
         let yAxisSpacing = xLength.doubleValue*self.yAxisSpacing
         
-        let xAxisLocation = yMinPadded //+ xAxisSpacing
-        let yAxisLocation = xMinPadded //+ yAxisSpacing
+        let xAxisLocation = yMinPadded
+        let yAxisLocation = xMinPadded
     
         let xRangeLocation = NSNumber(value: xMinPadded - yAxisSpacing)
         let xRangeLength = NSNumber(value: xMaxPadded - xMinPadded + yAxisSpacing)
@@ -190,8 +200,6 @@ class GraphController: NSObject, CPTPlotDelegate, CPTScatterPlotDataSource {
         let minDateRounded = NSCalendar.current.startOfDay(for: minDate)
         var maxDateRounded = NSCalendar.current.startOfDay(for: maxDate)
         maxDateRounded = NSCalendar.current.date(byAdding: dayComponent, to: maxDateRounded)!
-
-        print()
         
         var daysBetweenLabels = Double(calculateDaysBetweenTwoDates(start: minDateRounded, end: maxDateRounded))/xAxisTargetNumLabels
         daysBetweenLabels = (daysBetweenLabels.rounded() == 0) ? 1 : daysBetweenLabels.rounded()
@@ -199,7 +207,6 @@ class GraphController: NSObject, CPTPlotDelegate, CPTScatterPlotDataSource {
         dayComponent.day = Int(daysBetweenLabels)
 
         var currentDate = minDateRounded
-        
         var xLabelLocations: [NSNumber] = []
         
         let xLabelTextStyle = CPTMutableTextStyle()
@@ -209,15 +216,10 @@ class GraphController: NSObject, CPTPlotDelegate, CPTScatterPlotDataSource {
         
         while (currentDate <= maxDateRounded){
             
-            //let xLabelString = dateFormatter.string(from: currentDate)
-            //let xLabel = CPTAxisLabel(text: xLabelString, textStyle: xLabelTextStyle)
-            
+            let xLabelString = filteredDateFormatter.string(from: currentDate)
             let xLocation = NSNumber(value: currentDate.timeIntervalSince1970)
             
-            //print("label \(xLabelString)")
-            //print(xLocation)
-            
-            //xLabels.append(xLabel)
+            print("label \(xLabelString)")
             xLabelLocations.append(xLocation)
             
             currentDate = NSCalendar.current.date(byAdding: dayComponent, to: currentDate)!
@@ -225,11 +227,13 @@ class GraphController: NSObject, CPTPlotDelegate, CPTScatterPlotDataSource {
         
         
         let xAxisLabelFormatter = CPTTimeFormatter(dateFormatter: filteredDateFormatter)
+        xAxisLabelFormatter.referenceDate = Date(timeIntervalSince1970: 0)
+        
         axes.xAxis?.labelingPolicy = .locationsProvided;
         axes.xAxis?.labelFormatter = xAxisLabelFormatter
         axes.xAxis?.majorTickLocations = Set(xLabelLocations);
+        
         axes.xAxis?.updateMajorTickLabels()
-        //axes.xAxis?.labelRotation = 90.0
         axes.xAxis?.relabel()
     }
     

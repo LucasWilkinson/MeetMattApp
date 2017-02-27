@@ -1,34 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="S4R-Ja-viH">
-    <device id="retina4_7" orientation="portrait">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="v46-nS-IM4">
+    <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Root View Controller-->
-        <scene sceneID="clB-vc-fyl">
+        <!--Navigation Controller-->
+        <scene sceneID="E5a-CP-tH7">
             <objects>
-                <viewController id="703-4V-yAM" customClass="RootViewController" customModule="MeetMatt" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="I7W-xW-C47"/>
-                        <viewControllerLayoutGuide type="bottom" id="IfR-02-kHw"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="502-Ir-ELC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.60000002379999995" green="0.40000000600000002" blue="0.20000000300000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Q3h-pU-vEd" sceneMemberID="firstResponder"/>
+                <navigationController id="v46-nS-IM4" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="tc6-84-G1U">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="SbR-0G-xYD" kind="relationship" relationship="rootViewController" id="cCU-Sd-obM"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kZm-en-heE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-271" y="-243"/>
+            <point key="canvasLocation" x="-2384" y="-1488"/>
         </scene>
-        <!--Data View Controller-->
+        <!--Meet Matt-->
         <scene sceneID="snT-py-3hH">
             <objects>
                 <viewController storyboardIdentifier="DataViewController" id="S4R-Ja-viH" customClass="DataViewController" customModule="MeetMatt" customModuleProvider="target" sceneMemberID="viewController">
@@ -37,22 +34,17 @@
                         <viewControllerLayoutGuide type="bottom" id="EPS-s9-h4K"/>
                     </layoutGuides>
                     <view key="view" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="ZwX-cT-FIQ">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qrL-vq-BcC" customClass="CPTGraphHostingView">
-                                <rect key="frame" x="20" y="126" width="335" height="277"/>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qrL-vq-BcC" customClass="CPTGraphHostingView">
+                                <rect key="frame" x="40" y="127" width="335" height="228"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="277" id="VZr-EU-T9h"/>
-                                    <constraint firstAttribute="width" constant="335" id="qFt-jd-z6P"/>
-                                </constraints>
                             </view>
-                            <pickerView contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ivv-43-Yh1">
-                                <rect key="frame" x="0.0" y="573" width="375" height="94"/>
-                            </pickerView>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="oU0-LS-N1e">
-                                <rect key="frame" x="20" y="68" width="335" height="29"/>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="oU0-LS-N1e">
+                                <rect key="frame" x="40" y="83" width="335" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <segments>
                                     <segment title="Week"/>
                                     <segment title="Month"/>
@@ -60,44 +52,81 @@
                                 </segments>
                                 <color key="tintColor" red="0.29019607843137252" green="0.50980392156862742" blue="0.85882352941176465" alpha="1" colorSpace="calibratedRGB"/>
                             </segmentedControl>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Meet Matt the App" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="cF2-Le-7mQ">
-                                <rect key="frame" x="20" y="28" width="335" height="18.5"/>
-                                <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
-                                <color key="textColor" red="0.29019607843137252" green="0.50980392156862742" blue="0.85882352941176465" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="cF2-Le-7mQ" firstAttribute="leading" secondItem="ZwX-cT-FIQ" secondAttribute="leadingMargin" constant="4" id="0Bf-MH-4df"/>
-                            <constraint firstItem="qrL-vq-BcC" firstAttribute="top" secondItem="oU0-LS-N1e" secondAttribute="bottom" constant="30" id="3je-Oy-O2y"/>
-                            <constraint firstItem="oU0-LS-N1e" firstAttribute="top" secondItem="cF2-Le-7mQ" secondAttribute="bottom" constant="21.5" id="4CD-6I-NVI"/>
-                            <constraint firstItem="qrL-vq-BcC" firstAttribute="leading" secondItem="ZwX-cT-FIQ" secondAttribute="leadingMargin" constant="4" id="4tb-0R-cOZ"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="qrL-vq-BcC" secondAttribute="trailing" constant="4" id="9DZ-Fi-SMr"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="oU0-LS-N1e" secondAttribute="trailing" constant="4" id="HYQ-qX-lNP"/>
-                            <constraint firstItem="EPS-s9-h4K" firstAttribute="top" secondItem="Ivv-43-Yh1" secondAttribute="bottom" id="NRI-zh-Kbs"/>
-                            <constraint firstItem="cF2-Le-7mQ" firstAttribute="top" secondItem="fXf-Jd-eTc" secondAttribute="bottom" constant="8" id="NSg-Og-crw"/>
-                            <constraint firstItem="cF2-Le-7mQ" firstAttribute="leading" secondItem="ZwX-cT-FIQ" secondAttribute="leading" constant="20" symbolic="YES" id="PnF-O8-Bso"/>
-                            <constraint firstItem="qrL-vq-BcC" firstAttribute="top" secondItem="oU0-LS-N1e" secondAttribute="bottom" constant="30" id="R1B-oe-TlN"/>
-                            <constraint firstItem="oU0-LS-N1e" firstAttribute="leading" secondItem="ZwX-cT-FIQ" secondAttribute="leadingMargin" constant="4" id="Xfk-0e-Qzh"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="cF2-Le-7mQ" secondAttribute="trailing" constant="4" id="YCo-7j-Srg"/>
-                            <constraint firstAttribute="trailing" secondItem="cF2-Le-7mQ" secondAttribute="trailing" constant="20" symbolic="YES" id="cCk-mG-gz5"/>
-                            <constraint firstItem="Ivv-43-Yh1" firstAttribute="leading" secondItem="ZwX-cT-FIQ" secondAttribute="leading" id="dED-mz-SGr"/>
-                            <constraint firstAttribute="trailing" secondItem="Ivv-43-Yh1" secondAttribute="trailing" id="g4W-O0-rWq"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="qrL-vq-BcC" secondAttribute="trailing" constant="4" id="iBq-QP-NEu"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="qrL-vq-BcC" secondAttribute="trailing" constant="4" id="t4F-eG-0nG"/>
-                        </constraints>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Data" image="DataTabIcon" selectedImage="DataTabIcon" id="Zaa-Z0-n9Z"/>
+                    <navigationItem key="navigationItem" title="Meet Matt" id="fMU-ra-5d4">
+                        <barButtonItem key="leftBarButtonItem" tag="1" systemItem="refresh" id="O81-R9-0S4">
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="filterSelector" destination="oU0-LS-N1e" id="gA5-Qs-mad"/>
                         <outlet property="hostView" destination="qrL-vq-BcC" id="Mg0-N7-oSW"/>
-                        <outlet property="meetMattLabel" destination="cF2-Le-7mQ" id="Jqb-qJ-tB5"/>
-                        <outlet property="userSelector" destination="Ivv-43-Yh1" id="7iB-Kd-HyF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GmD-Rr-ZGN" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="596" y="-243.32833583208398"/>
+            <point key="canvasLocation" x="11.594202898550726" y="-1769.021739130435"/>
+        </scene>
+        <!--Users-->
+        <scene sceneID="hMj-03-JjB">
+            <objects>
+                <viewController storyboardIdentifier="UsersViewController" id="j4y-YN-3CP" customClass="UsersViewController" customModule="MeetMatt" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ceO-YN-Qjt"/>
+                        <viewControllerLayoutGuide type="bottom" id="HHP-zC-kj1"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="uHE-e9-zjh">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cNZ-G3-8Ne">
+                                <rect key="frame" x="20" y="198" width="375" height="332"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </pickerView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Users" image="UsersIcon" id="vW1-tt-b2v"/>
+                    <connections>
+                        <outlet property="userSelector" destination="cNZ-G3-8Ne" id="GB4-hO-QF9"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fpg-1w-E7B" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="11.594202898550726" y="-1026.358695652174"/>
+        </scene>
+        <!--Meet Matt-->
+        <scene sceneID="RHd-Tc-EAc">
+            <objects>
+                <tabBarController id="SbR-0G-xYD" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" title="Meet Matt" id="8Ps-cG-eHT">
+                        <barButtonItem key="leftBarButtonItem" systemItem="refresh" id="jUr-Kh-0Mt">
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </barButtonItem>
+                    </navigationItem>
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="b7f-4L-uNt">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="S4R-Ja-viH" kind="relationship" relationship="viewControllers" id="sjK-gX-Nyp"/>
+                        <segue destination="j4y-YN-3CP" kind="relationship" relationship="viewControllers" id="9Rq-6F-79y"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jfB-gy-m4v" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1267" y="-1489"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="DataTabIcon" width="25" height="25"/>
+        <image name="UsersIcon" width="32" height="32"/>
+    </resources>
+    <color key="tintColor" red="0.2901960784" green="0.50980392159999999" blue="0.85882352939999995" alpha="1" colorSpace="calibratedRGB"/>
 </document>

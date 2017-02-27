@@ -26,41 +26,22 @@ class User {
     
 }
 
+let MeetMattBlue = UIColor(colorLiteralRed: 74/255, green: 130/255, blue: 219/255, alpha: 1.0)
 
-class DataViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
+let graphController = GraphController()
+let serverInterface = ServerDataController()
 
-    @IBOutlet weak var meetMattLabel: UILabel!
-    @IBOutlet weak var hostView: CPTGraphHostingView!
-    @IBOutlet weak var userSelector: UIPickerView!
-    @IBOutlet weak var filterSelector: UISegmentedControl!
-    
-    let fake_yData: [Double] = [1,-1,1.2,-1.2,0,-2,3,-2,1,-1, 1,-1, 1,-1]
-    let fake_xData: [Double] = [0, 1,  2,   3,4, 5,6, 7,8,10,11,15,16,17]
-    
+protocol UserSelectorDelegate {
+    func usersUpdated()
+}
+
+class ServerDataController{
+    var userSelectorDelegate : UserSelectorDelegate? = nil
+    var appFirstSuccessfulReq = false
     var users: [User] = []
-    var dataObject: String = ""
-    var graphController = GraphController()
     
-    let plotSpace = CPTXYPlotSpace()
-
-    func requestUsers(){
-        Alamofire.request("http://api.meetmatt.ca/public/api/v1/users").validate().responseJSON { response in
-            print(response.result)   // result of response serialization
-            var userList: [User] = []
-            
-            if let usersJSON = response.result.value as? [Any]{
-                for userJSON in usersJSON {
-                    guard let user = User(json: userJSON  as! [String : Any])
-                        else{ continue }
-                    
-                    userList.append(user)
-                }
-            }
-            if (userList.count > 0){
-                self.getUserData(id: userList[0].id)
-            }
-            self.updateUserList(newUserList: userList)
-        }
+    func getUsers()->[User]{
+        return users
     }
     
     func getUserData(id: Int){
@@ -72,10 +53,10 @@ class DataViewController: UIViewController, UIPickerViewDataSource, UIPickerView
             //print(response.result.value)
             
             var dataList: [scatterPlotPoint] = []
-                
+            
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-
+            
             //let date = dateFormatter.date(from:isoDate)!
             
             if let dataPointsJSON = response.result.value as? [Any]{
@@ -93,18 +74,48 @@ class DataViewController: UIViewController, UIPickerViewDataSource, UIPickerView
                     
                     //print("\((date?.timeIntervalSince1970)!)")
                 }
-                self.graphController.setData(data: dataList)
+                graphController.setData(data: dataList)
             }
         }
     }
     
-    func updateUserList (newUserList: [User]){
-        print("updating user list")
-        users = newUserList
+    func requestUsers(){
+        Alamofire.request("http://api.meetmatt.ca/public/api/v1/users").validate().responseJSON { response in
+            print(response.result)   // result of response serialization
+            var userList: [User] = []
+            
+            if let usersJSON = response.result.value as? [Any]{
+                for userJSON in usersJSON {
+                    guard let user = User(json: userJSON  as! [String : Any])
+                        else{ continue }
+                    
+                    userList.append(user)
+                }
+            }
+            
+            print("Got users")
+            print(userList)
+            
+            if (!self.appFirstSuccessfulReq && userList.count != 0){
+                self.appFirstSuccessfulReq = true
+                self.getUserData(id: userList[0].id)
+            }
+            
+            self.userSelectorDelegate?.usersUpdated()
+            self.users = userList
+        }
+    }
+}
+
+
+
+class UsersViewController: UIViewController , UIPickerViewDataSource, UIPickerViewDelegate, UserSelectorDelegate {
+    
+    @IBOutlet weak var userSelector: UIPickerView!
+    
+    func usersUpdated(){
         userSelector.reloadAllComponents()
     }
-    
-    
     
     /* -- start Picker view data source and delegate functions */
     
@@ -113,21 +124,51 @@ class DataViewController: UIViewController, UIPickerViewDataSource, UIPickerView
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return users.count
+        return serverInterface.getUsers().count
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        let users = serverInterface.getUsers()
+        guard (row < users.count) else {return nil}
+        
         return users[row].name
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         //myLabel.text = users[row].name
-        print("selected \(users[row].name)")
-        getUserData(id: users[row].id)
+        let users = serverInterface.getUsers()
+        guard (row < users.count) else {return}
+        
+        //print("selected \(serverInterface.getUsers()[row].name)")
+        serverInterface.getUserData(id: users[row].id)
     }
     
     /* ---- end Picker view data source and delegate functions */
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        print("view did load")
+        
+        serverInterface.userSelectorDelegate = self
+        
+        userSelector.dataSource = self
+        userSelector.delegate = self
+    }
+}
+
+class DataViewController: UIViewController{
+
+    @IBOutlet weak var hostView: CPTGraphHostingView!
+    @IBOutlet weak var filterSelector: UISegmentedControl!
+    //@IBOutlet weak var navigationBar: UINavigationItem!
+    
+    let fake_yData: [Double] = [1,-1,1.2,-1.2,0,-2,3,-2,1,-1, 1,-1, 1,-1]
+    let fake_xData: [Double] = [0, 1,  2,   3,4, 5,6, 7,8,10,11,15,16,17]
+    
+    var dataObject: String = ""
+    
+    let plotSpace = CPTXYPlotSpace()
     
     func filterSelected(){
         
@@ -150,14 +191,13 @@ class DataViewController: UIViewController, UIPickerViewDataSource, UIPickerView
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        //navigationBar.title = "Meet Matt"
+        
         hostView.hostedGraph = graphController.createGraph(frame: hostView.bounds)
-        userSelector.dataSource = self
-        userSelector.delegate = self
         filterSelector.selectedSegmentIndex = 2
         filterSelector.addTarget(self, action: #selector(filterSelected), for: .valueChanged)
-        
-        requestUsers()
-        
+    
         //graphController.setData(xData: fake_xData, yData: fake_yData)
     }
 
@@ -168,6 +208,8 @@ class DataViewController: UIViewController, UIPickerViewDataSource, UIPickerView
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.barTintColor = MeetMattBlue
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
     }
 
 
