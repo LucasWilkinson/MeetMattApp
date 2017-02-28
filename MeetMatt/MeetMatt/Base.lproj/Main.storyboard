@@ -100,6 +100,9 @@
                     <navigationItem key="navigationItem" title="Meet Matt" id="fMU-ra-5d4">
                         <barButtonItem key="leftBarButtonItem" tag="1" systemItem="refresh" id="O81-R9-0S4">
                             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="refresh:" destination="S4R-Ja-viH" id="IYv-mk-DSS"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>

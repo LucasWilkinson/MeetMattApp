@@ -15,6 +15,63 @@ struct scatterPlotPoint {
     var y: Double
 }
 
+enum filterTypesEnum {
+    case WEEK
+    case MONTH
+    case ALL
+}
+
+let dataController = DataController()
+
+class DataController: NSObject {
+    var data: [scatterPlotPoint] = []
+    
+    var associatedGraphControllers: [GraphController] = []
+    
+    func setData(data: [scatterPlotPoint]){
+        self.data = data
+        
+        for controller in associatedGraphControllers {
+            controller.reloadData()
+        }
+    }
+    
+    func getMostRecentWeight() -> Double? {
+         return data.max(by: {$0.x < $1.x})?.y
+    }
+    
+    func getFilterData(filter: filterTypesEnum) -> [scatterPlotPoint]{
+        var filteredData: [scatterPlotPoint] = []
+        
+        var currentDate = Date()
+        currentDate = NSCalendar.current.startOfDay(for: currentDate)
+        
+        var dayComponent = DateComponents()
+        
+        switch (filter){
+        case .WEEK:
+            dayComponent.weekOfYear = -1
+            let compareDate = NSCalendar.current.date(byAdding: dayComponent, to: currentDate)
+            
+            filteredData = data.filter({Date(timeIntervalSince1970: $0.x) > compareDate!})
+            break
+            
+        case .MONTH:
+            dayComponent.month = -1
+            let compareDate = NSCalendar.current.date(byAdding: dayComponent, to: currentDate)
+            
+            filteredData = data.filter({Date(timeIntervalSince1970: $0.x) > compareDate!})
+            break
+            
+        case .ALL:
+            filteredData = data
+            break
+        }
+        
+        return filteredData
+    }
+}
+
 class GraphController: NSObject, CPTPlotDelegate, CPTScatterPlotDataSource {
     
     var graph: CPTXYGraph! = nil
@@ -26,7 +83,6 @@ class GraphController: NSObject, CPTPlotDelegate, CPTScatterPlotDataSource {
     
     let xAxisTargetNumLabels: Double = 6.0
     
-    var data: [scatterPlotPoint] = []
     var filteredData: [scatterPlotPoint] = []
     
     var currentFilter: filterTypesEnum = .ALL
@@ -34,21 +90,9 @@ class GraphController: NSObject, CPTPlotDelegate, CPTScatterPlotDataSource {
     
     let backgroundColor = CPTColor(cgColor: MeetMattBlue.cgColor)
     
-    enum filterTypesEnum {
-        case WEEK
-        case MONTH
-        case ALL
-    }
-    
     override init() {
         super.init()
         filteredDateFormatter.dateFormat = "MM-dd"
-    }
-    
-    func setData(data: [scatterPlotPoint]){
-        
-        self.data = data
-        reloadData()
     }
     
     func setFilter(filterType: filterTypesEnum){
@@ -57,41 +101,29 @@ class GraphController: NSObject, CPTPlotDelegate, CPTScatterPlotDataSource {
         reloadData()
     }
     
+    func filterData(){
+        filteredData = dataController.getFilterData(filter: currentFilter)
+        
+        switch (currentFilter){
+        case .WEEK:
+            filteredDateFormatter.dateFormat = "E"
+            break
+            
+        case .MONTH:
+            filteredDateFormatter.dateFormat = "MM-dd"
+            break
+            
+        case .ALL:
+            filteredDateFormatter.dateFormat = "MM-dd"
+            break
+        }
+    }
+    
     func reloadData(){
         
         filterData()
         scaleAxis()
         graph.reloadData()
-    }
-    
-    func filterData(){
-        var currentDate = Date()
-        currentDate = NSCalendar.current.startOfDay(for: currentDate)
-        
-        var dayComponent = DateComponents()
-        
-        switch (currentFilter){
-        case .WEEK:
-            dayComponent.weekOfYear = -1
-            let compareDate = NSCalendar.current.date(byAdding: dayComponent, to: currentDate)
-            
-            filteredDateFormatter.dateFormat = "E"
-            filteredData = data.filter({Date(timeIntervalSince1970: $0.x) > compareDate!})
-            break
-            
-        case .MONTH:
-            dayComponent.month = -1
-            let compareDate = NSCalendar.current.date(byAdding: dayComponent, to: currentDate)
-            
-            filteredDateFormatter.dateFormat = "MM-dd"
-            filteredData = data.filter({Date(timeIntervalSince1970: $0.x) > compareDate!})
-            break
-            
-        case .ALL:
-            filteredDateFormatter.dateFormat = "MM-dd"
-            filteredData = data
-            break
-        }
     }
     
     func scaleAxis(){
@@ -115,7 +147,7 @@ class GraphController: NSObject, CPTPlotDelegate, CPTScatterPlotDataSource {
             yMin -= 2
         }
         
-        print("setting xMax: \(xMax) xMin: \(xMin) yMax: \(yMax) yMin: \(yMin)")
+        //print("setting xMax: \(xMax) xMin: \(xMin) yMax: \(yMax) yMin: \(yMin)")
         setAxis(xMin: xMin, xMax: xMax, yMin: yMin, yMax: yMax)
     }
     
@@ -172,7 +204,7 @@ class GraphController: NSObject, CPTPlotDelegate, CPTScatterPlotDataSource {
         axes.yAxis?.visibleRange = yRange
         axes.yAxis?.gridLinesRange = yGridRange
         
-        setXLabels(numberOfRecords: data.count, xMin: xMin, xMax: xMax)
+        setXLabels(numberOfRecords: filteredData.count, xMin: xMin, xMax: xMax)
     }
     
     private func calculateDaysBetweenTwoDates(start: Date, end: Date) -> Int {
@@ -216,10 +248,10 @@ class GraphController: NSObject, CPTPlotDelegate, CPTScatterPlotDataSource {
         
         while (currentDate <= maxDateRounded){
             
-            let xLabelString = filteredDateFormatter.string(from: currentDate)
+            //let xLabelString = filteredDateFormatter.string(from: currentDate)
             let xLocation = NSNumber(value: currentDate.timeIntervalSince1970)
             
-            print("label \(xLabelString)")
+            //print("label \(xLabelString)")
             xLabelLocations.append(xLocation)
             
             currentDate = NSCalendar.current.date(byAdding: dayComponent, to: currentDate)!
