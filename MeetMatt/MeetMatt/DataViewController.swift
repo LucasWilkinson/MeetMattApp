@@ -224,7 +224,19 @@ class TargetWeightPicker: NSObject, UIPickerViewDataSource, UIPickerViewDelegate
         weightsToOffer = Array(currentWeightInt-plusMinusWeightRange...currentWeightInt+plusMinusWeightRange)
         
         picker.reloadAllComponents()
-        picker.selectRow(weightsToOffer.count/2, inComponent: 0, animated: false)
+        
+        if (associatedTextField?.text != "") {
+            if let found = weightsToOffer.index(of: Int((associatedTextField?.text)!)!) {
+                picker.selectRow(found, inComponent: 0, animated: false)
+            }
+            else {
+                picker.selectRow(weightsToOffer.count/2, inComponent: 0, animated: false)
+            }
+        }else{
+            picker.selectRow(weightsToOffer.count/2, inComponent: 0, animated: false)
+        }
+        
+        
     }
     
     
@@ -267,6 +279,8 @@ class DataViewController: UIViewController {
     //@IBOutlet weak var navigationBar: UINavigationItem!
     @IBOutlet weak var targetWeight: UITextField!
     
+    @IBOutlet weak var Day: UILabel!
+    @IBOutlet weak var Month: UILabel!
     @IBAction func refresh(_ sender: Any) {
         serverInterface.requestUsers()
     }
@@ -294,6 +308,36 @@ class DataViewController: UIViewController {
         }
     }
     
+    func targetWeightUpdated(_ textField: UITextField){
+        let prediction = dataController.getDatePrediction(targetWeight: Int(targetWeight.text!)!)
+        
+        var currentDate = Date()
+        currentDate = NSCalendar.current.startOfDay(for: currentDate)
+        var dayComponent = DateComponents()
+        dayComponent.year = 1
+        let compareDate = NSCalendar.current.date(byAdding: dayComponent, to: currentDate)
+        
+        var predictedDate = Date(timeIntervalSince1970: prediction)
+        predictedDate = NSCalendar.current.startOfDay(for: predictedDate)
+        
+        if(predictedDate >= currentDate && predictedDate < compareDate!){
+            let dateFormater = DateFormatter()
+            dateFormater.dateFormat = "MMM"
+            let month = dateFormater.string(from: predictedDate)
+            dateFormater.dateFormat = "dd"
+            let day = dateFormater.string(from: predictedDate)
+            
+            Day.text = day
+            Month.text = month.uppercased()
+            
+        }else{
+            Day.text = "--"
+            Month.text = "---"
+        }
+        
+        print("Update")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -307,13 +351,14 @@ class DataViewController: UIViewController {
         targetWeight.inputView = targetWeightPicker.view
     
         dataController.associatedGraphControllers.append(graphController)
+        targetWeight.addTarget(self, action: #selector(targetWeightUpdated), for: .editingDidEnd)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.barTintColor = MeetMattBlue

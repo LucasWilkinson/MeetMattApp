@@ -1,1 +1,4 @@
+github "Alamofire/Alamofire" "4.4.0"
 github "core-plot/core-plot" "release_2.2"
+github "madbat/SwiftMath" "v0.1.1"
+github "robrix/Set" "1.4.1"

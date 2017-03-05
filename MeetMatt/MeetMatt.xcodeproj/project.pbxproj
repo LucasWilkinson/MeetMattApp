@@ -8,9 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E80E41A91E4811150056013A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E80E41A81E4811150056013A /* AppDelegate.swift */; };
-		E80E41AB1E4811150056013A /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E80E41AA1E4811150056013A /* RootViewController.swift */; };
 		E80E41AD1E4811150056013A /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E80E41AC1E4811150056013A /* DataViewController.swift */; };
-		E80E41AF1E4811150056013A /* ModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E80E41AE1E4811150056013A /* ModelController.swift */; };
 		E80E41B21E4811150056013A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E80E41B01E4811150056013A /* Main.storyboard */; };
 		E80E41B41E4811150056013A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E80E41B31E4811150056013A /* Assets.xcassets */; };
 		E80E41B71E4811150056013A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E80E41B51E4811150056013A /* LaunchScreen.storyboard */; };
@@ -20,6 +18,13 @@
 		E80E41EA1E481EE20056013A /* CorePlot.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E80E41E81E481EE20056013A /* CorePlot.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E82104811E5B79EF002C2328 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E82104801E5B79EF002C2328 /* Alamofire.framework */; };
 		E82104821E5B79EF002C2328 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E82104801E5B79EF002C2328 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E82104841E5BD545002C2328 /* GraphController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E82104831E5BD545002C2328 /* GraphController.swift */; };
+		E82104861E5D2AF9002C2328 /* Loading Screen.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E82104851E5D2AF9002C2328 /* Loading Screen.jpg */; };
+		E84EB3CD1E63991F0038DF63 /* Combo Chart-50.png in Resources */ = {isa = PBXBuildFile; fileRef = E84EB3CC1E63991E0038DF63 /* Combo Chart-50.png */; };
+		E8B6A5F21E647DAA00C29721 /* Calendar-icon-blank.png in Resources */ = {isa = PBXBuildFile; fileRef = E8B6A5F11E647DAA00C29721 /* Calendar-icon-blank.png */; };
+		E8C08EA61E6BCB600096E96C /* PolyReg in Resources */ = {isa = PBXBuildFile; fileRef = E8C08EA51E6BCB600096E96C /* PolyReg */; };
+		E8C08EB11E6BD2DB0096E96C /* DoublesMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = E8C08EAE1E6BD2DB0096E96C /* DoublesMatrix.m */; };
+		E8C08EB31E6BD2DB0096E96C /* PolynomialRegression.m in Sources */ = {isa = PBXBuildFile; fileRef = E8C08EB01E6BD2DB0096E96C /* PolynomialRegression.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,9 +62,7 @@
 /* Begin PBXFileReference section */
 		E80E41A51E4811150056013A /* MeetMatt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MeetMatt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E80E41A81E4811150056013A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E80E41AA1E4811150056013A /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		E80E41AC1E4811150056013A /* DataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
-		E80E41AE1E4811150056013A /* ModelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelController.swift; sourceTree = "<group>"; };
 		E80E41B11E4811150056013A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E80E41B31E4811150056013A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E80E41B61E4811150056013A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -73,6 +76,15 @@
 		E80E41DB1E481AEF0056013A /* Charts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Charts.framework; path = Carthage/Build/iOS/Charts.framework; sourceTree = "<group>"; };
 		E80E41E81E481EE20056013A /* CorePlot.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CorePlot.framework; path = Carthage/Build/iOS/CorePlot.framework; sourceTree = "<group>"; };
 		E82104801E5B79EF002C2328 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
+		E82104831E5BD545002C2328 /* GraphController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphController.swift; sourceTree = "<group>"; };
+		E82104851E5D2AF9002C2328 /* Loading Screen.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Loading Screen.jpg"; sourceTree = "<group>"; };
+		E84EB3CC1E63991E0038DF63 /* Combo Chart-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Combo Chart-50.png"; sourceTree = "<group>"; };
+		E8B6A5F11E647DAA00C29721 /* Calendar-icon-blank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Calendar-icon-blank.png"; sourceTree = "<group>"; };
+		E8C08EA21E6BC87C0096E96C /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = MeetMatt/opencv2.framework; sourceTree = "<group>"; };
+		E8C08EA51E6BCB600096E96C /* PolyReg */ = {isa = PBXFileReference; lastKnownFileType = folder; path = PolyReg; sourceTree = "<group>"; };
+		E8C08EAE1E6BD2DB0096E96C /* DoublesMatrix.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DoublesMatrix.m; path = MeetMatt/PolyReg/DoublesMatrix.m; sourceTree = "<group>"; };
+		E8C08EAF1E6BD2DB0096E96C /* PolynomialRegression.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PolynomialRegression.h; path = MeetMatt/PolyReg/PolynomialRegression.h; sourceTree = "<group>"; };
+		E8C08EB01E6BD2DB0096E96C /* PolynomialRegression.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PolynomialRegression.m; path = MeetMatt/PolyReg/PolynomialRegression.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +117,10 @@
 		E80E419C1E4811140056013A = {
 			isa = PBXGroup;
 			children = (
+				E8C08EAE1E6BD2DB0096E96C /* DoublesMatrix.m */,
+				E8C08EAF1E6BD2DB0096E96C /* PolynomialRegression.h */,
+				E8C08EB01E6BD2DB0096E96C /* PolynomialRegression.m */,
+				E8C08EA21E6BC87C0096E96C /* opencv2.framework */,
 				E82104801E5B79EF002C2328 /* Alamofire.framework */,
 				E80E41E81E481EE20056013A /* CorePlot.framework */,
 				E80E41A71E4811150056013A /* MeetMatt */,
@@ -128,14 +144,17 @@
 		E80E41A71E4811150056013A /* MeetMatt */ = {
 			isa = PBXGroup;
 			children = (
-				E80E41A81E4811150056013A /* AppDelegate.swift */,
-				E80E41AA1E4811150056013A /* RootViewController.swift */,
-				E80E41AC1E4811150056013A /* DataViewController.swift */,
-				E80E41AE1E4811150056013A /* ModelController.swift */,
-				E80E41B01E4811150056013A /* Main.storyboard */,
+				E8C08EA51E6BCB600096E96C /* PolyReg */,
 				E80E41B31E4811150056013A /* Assets.xcassets */,
 				E80E41B51E4811150056013A /* LaunchScreen.storyboard */,
+				E82104851E5D2AF9002C2328 /* Loading Screen.jpg */,
 				E80E41B81E4811150056013A /* Info.plist */,
+				E80E41A81E4811150056013A /* AppDelegate.swift */,
+				E80E41B01E4811150056013A /* Main.storyboard */,
+				E8B6A5F11E647DAA00C29721 /* Calendar-icon-blank.png */,
+				E84EB3CC1E63991E0038DF63 /* Combo Chart-50.png */,
+				E80E41AC1E4811150056013A /* DataViewController.swift */,
+				E82104831E5BD545002C2328 /* GraphController.swift */,
 			);
 			path = MeetMatt;
 			sourceTree = "<group>";
@@ -277,8 +296,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				E80E41B71E4811150056013A /* LaunchScreen.storyboard in Resources */,
+				E8C08EA61E6BCB600096E96C /* PolyReg in Resources */,
+				E84EB3CD1E63991F0038DF63 /* Combo Chart-50.png in Resources */,
 				E80E41B41E4811150056013A /* Assets.xcassets in Resources */,
 				E80E41B21E4811150056013A /* Main.storyboard in Resources */,
+				E82104861E5D2AF9002C2328 /* Loading Screen.jpg in Resources */,
+				E8B6A5F21E647DAA00C29721 /* Calendar-icon-blank.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,8 +326,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E80E41AB1E4811150056013A /* RootViewController.swift in Sources */,
-				E80E41AF1E4811150056013A /* ModelController.swift in Sources */,
+				E8C08EB11E6BD2DB0096E96C /* DoublesMatrix.m in Sources */,
+				E8C08EB31E6BD2DB0096E96C /* PolynomialRegression.m in Sources */,
+				E82104841E5BD545002C2328 /* GraphController.swift in Sources */,
 				E80E41AD1E4811150056013A /* DataViewController.swift in Sources */,
 				E80E41A91E4811150056013A /* AppDelegate.swift in Sources */,
 			);
@@ -459,16 +483,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 7R5MWDAWJX;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/MeetMatt",
+					"$(PROJECT_DIR)/MeetMatt/PolyReg",
 				);
 				INFOPLIST_FILE = MeetMatt/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = MeetMatt.MeetMatt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = MeetMatt/PolyReg/PolyReg_objc_bridging_header.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
@@ -479,16 +507,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 7R5MWDAWJX;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/MeetMatt",
+					"$(PROJECT_DIR)/MeetMatt/PolyReg",
 				);
 				INFOPLIST_FILE = MeetMatt/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = MeetMatt.MeetMatt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = MeetMatt/PolyReg/PolyReg_objc_bridging_header.h;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

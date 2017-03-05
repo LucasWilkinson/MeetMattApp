@@ -26,10 +26,12 @@ let dataController = DataController()
 class DataController: NSObject {
     var data: [scatterPlotPoint] = []
     
+    let predictionPolyDeg:Int = 1 //only 1 or 2
+    
     var associatedGraphControllers: [GraphController] = []
     
     func setData(data: [scatterPlotPoint]){
-        self.data = data
+        self.data = data.sorted(by: {$0.x < $1.x})
         
         for controller in associatedGraphControllers {
             controller.reloadData()
@@ -38,6 +40,76 @@ class DataController: NSObject {
     
     func getMostRecentWeight() -> Double? {
          return data.max(by: {$0.x < $1.x})?.y
+    }
+    
+    func getLatestDataPoints(numPoints: Int) -> [scatterPlotPoint]{
+        var startIndex = Int(data.count-numPoints)
+        startIndex = startIndex > 0 ? startIndex : 0
+        let endIndex = Int(data.count)
+        return Array(data[startIndex..<endIndex])
+    }
+    
+    func predict(xVals: [NSNumber], yVals: [NSNumber], polyDeg: Int, forYval: Double) -> Double{
+        let xValsArray = NSMutableArray(array: xVals)
+        let yValsArray = NSMutableArray(array: yVals)
+        let regression = PolynomialRegression.regression(withXValues: xValsArray, andYValues: yValsArray, polynomialDegree: Int32(polyDeg))
+    
+        if regression == nil {
+            return 0
+        }
+        
+        var prediction: Double = 0
+        
+        let regressionArray = regression! as NSArray as! [NSNumber]
+        
+        if (polyDeg == 2){
+            let a = regressionArray[2].doubleValue
+            let b = regressionArray[1].doubleValue
+            let c = regressionArray[0].doubleValue
+        
+            let y = forYval
+        
+            let d = pow(b,2)-4*a*(c-y)
+            if (d < 0){
+                return 0
+            }
+        
+            let x1 = (-b + sqrt(d))/(2*a)
+            let x2 = (-b - sqrt(d))/(2*a)
+        
+            print(x1)
+            print(x2)
+        
+            prediction = x1
+        }else if (polyDeg == 1){
+            let m = regressionArray[1].doubleValue
+            let b = regressionArray[0].doubleValue
+            
+            let y = forYval
+            
+            prediction = (y-b)/m
+        }
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        
+        let targetDate = Date(timeIntervalSince1970: prediction)
+        print(targetDate)
+        print(dateFormatter.string(from: targetDate))
+        
+        print(prediction)
+        return prediction
+    }
+    
+    func getDatePrediction(targetWeight: Int)-> Double{
+        let dataToUseInRegression = getLatestDataPoints(numPoints: 10)
+
+        let xVals = dataToUseInRegression.map({return NSNumber(value: $0.x)})
+        let yVals = dataToUseInRegression.map({return NSNumber(value: $0.y)})
+        
+        print(xVals)
+        
+        return predict(xVals: xVals, yVals: yVals, polyDeg: predictionPolyDeg, forYval: Double(targetWeight))
     }
     
     func getFilterData(filter: filterTypesEnum) -> [scatterPlotPoint]{
